@@ -1,6 +1,5 @@
 from collections import deque
 from numpy import arange
-import wx, wxmpl
 from matplotlib.ticker import MaxNLocator
 
 from nerven_panels import *

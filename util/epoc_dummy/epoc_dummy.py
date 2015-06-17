@@ -6,9 +6,11 @@ is a 20-second dump of my brain activity with generally good contact
 quality.''' 
 
 import sys, time
+from os import mkfifo, unlink
+
+args = sys.argv
 
 def main():
-    args = sys.argv
     if len(args) < 3:
         print("usage: %s <dummy data file> <output path>" % args[0])
         return 1
@@ -19,12 +21,19 @@ def main():
             data.append(pkt)
             pkt = f.read(32)
     print("Read %d packets." % len(data))
-    with open(args[2], 'wb') as f:
-        while True:
-            for pkt in data:
-                f.write(pkt)
-                time.sleep(1.0/128.0)
-        
+    try:
+        mkfifo(args[2], 0666)
+    except:
+        return
+    while True:
+        for pkt in data:
+            #with open(args[2], 'wb') as f:
+            f = open(args[2], 'wb')
+            f.write(pkt)
+            time.sleep(1.0/128.0)
 
 if __name__ == '__main__':
-    sys.exit(main())
+    try:
+        main()
+    except KeyboardInterrupt:
+        unlink(args[2])

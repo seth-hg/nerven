@@ -14,8 +14,9 @@ from config import NervenConfig
 class NervenFrame(wx.Frame):
     def __init__(self, parent, id, opts):
         wx.Frame.__init__(self, parent, MAIN_FRAME_ID, MAIN_TITLE)
-        self.opts = opts
+        #self.opts = opts
         self.cfg = NervenConfig(create=True)
+        self.cfg['data_path'] = opts.stream_path
         self.status_bar = self.CreateStatusBar(STATUS_FIELDS)
         self._create_menu()
         self._set_poll_timer()
